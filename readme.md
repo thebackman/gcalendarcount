@@ -20,7 +20,7 @@ function runner() {
   // to_date: example "2017-12-31"
   // searchstring: example "gym"
   // docname: example "Gym stats for 2017"
-  // include_titles
+  // include_titles: boolean, true / false 
   
   make_calendar_stats("2017-01-01", "2017-12-31", "gym", "Gym stats for 2017", true) ; 
 }
