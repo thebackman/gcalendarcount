@@ -20,13 +20,16 @@ function runner() {
   // to_date: example "2017-12-31"
   // searchstring: example "gym"
   // docname: example "Gym stats for 2017"
+  // include_titles
   
-  make_calendar_stats("2017-01-01", "2017-12-31", "gym", "Gym stats for 2017") ; 
+  make_calendar_stats("2017-01-01", "2017-12-31", "gym", "Gym stats for 2017", true) ; 
 }
 ```
 
 The script will extract all calendar events (in your default calendar) that match this search criteria and creates 
-a document in your Google drive with some statistics related to these events.
+a document in your Google drive with some statistics related to these events. The _include_titles_ parameter is used
+so that you may see what calendar titles the count is based on (i.e. what the search finds). It will print the titles
+in _italic_ just below the count.
 
 ### What could be better (to fix / add later)
 
@@ -34,7 +37,6 @@ a document in your Google drive with some statistics related to these events.
 * the search is pretty non-inclusive (it finds __exactly__ the word what you specify), this could also probably be improved
 * The created document could be prettier
 * deal with no events found and other possible failures
-* add the possibility to list the title of the events that are found
 
 ### Notes
 
@@ -48,4 +50,4 @@ https://developers.google.com/apps-script/guides/clasp
 
 ### Change log
 
-
+* Added the possibility to list the titles of events

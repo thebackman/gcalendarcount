@@ -1,16 +1,14 @@
 
 /* --- main workhorse function --- */
 
-function make_calendar_stats(from_date, to_date, searchstring, docname) {
+function make_calendar_stats(from_date, to_date, searchstring, docname, include_titles) {
 
   // --- access calendar data
 
   // define start date
   var startdate = new Date(from_date) ;
-  Logger.log(startdate) ;
   // define enddate
   var enddate = new Date(to_date) ;
-  Logger.log(enddate) ;
   // get the calendar data for the particular search string
   var calevents = CalendarApp.getDefaultCalendar().getEvents(startdate, enddate, {search: searchstring}) ;
   
@@ -31,14 +29,23 @@ function make_calendar_stats(from_date, to_date, searchstring, docname) {
   var month_year = [] ;
   // create empty object to hold event counts
   var counts_event = {} ;
-  // loop through events to combine month and year
+  // create empty object to hold titles
+  var titles = {} ;
+  // loop through events to combine month, year and titles
    for (var i = 0 ; i < calevents.length ; i++) {
      var month_event =  month_string(calevents[i].getStartTime().getMonth())
-     var year_event = String(calevents[i].getStartTime().getYear()) ; 
+     var year_event = String(calevents[i].getStartTime().getYear()) ;
      // save month and year info as key
      month_year.push(month_event + " " + year_event) ;
      // calculate events and add to object / dict
-    counts_event[month_year[i]] = 1 + (counts_event[month_year[i]] || 0) ;
+     counts_event[month_year[i]] = 1 + (counts_event[month_year[i]] || 0) ;
+     // add titles to arrays inside titles object
+     if (typeof titles[month_year[i]] == 'undefined') {
+       titles[month_year[i]] = [] ;
+       titles[month_year[i]].push(calevents[i].getTitle()) ;
+     } else {
+       titles[month_year[i]].push(calevents[i].getTitle()) ;
+     }
    } 
    
   // --- Create new doc
@@ -70,10 +77,13 @@ function make_calendar_stats(from_date, to_date, searchstring, docname) {
   String(mean_ev) + 
   " per month. Below is a count of events per month.");
   
-  // --- write monthly stats 
+  // --- write monthly stats and perhaps titles
   
   for(var key in counts_event){
     write_month_heading(docbody, key) ;
     docbody.appendParagraph(counts_event[key] + " events found") ;
+    if(include_titles == true) {
+      docbody.appendParagraph(titles[key].toString()).editAsText().setItalic(true) ;
+    }
   }
 }
