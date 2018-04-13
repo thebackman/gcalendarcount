@@ -33,13 +33,11 @@ function make_calendar_stats(from_date, to_date, searchstring, docname, include_
   var titles = {} ;
   // loop through events to combine month, year and titles
    for (var i = 0 ; i < calevents.length ; i++) {
-     var month_event =  month_string(calevents[i].getStartTime().getMonth())
-     var year_event = String(calevents[i].getStartTime().getYear()) ;
      // save month and year info as key
-     month_year.push(month_event + " " + year_event) ;
+     month_year.push(month_string(calevents[i].getStartTime().getMonth()) + " " + String(calevents[i].getStartTime().getYear())) ;
      // calculate events and add to object / dict
      counts_event[month_year[i]] = 1 + (counts_event[month_year[i]] || 0) ;
-     // add titles to arrays inside titles object
+     // add titles to titles obj
      if (typeof titles[month_year[i]] == 'undefined') {
        titles[month_year[i]] = [] ;
        titles[month_year[i]].push(calevents[i].getTitle()) ;
@@ -50,13 +48,11 @@ function make_calendar_stats(from_date, to_date, searchstring, docname, include_
    
   // --- Create new doc
   
-  // access the doc
+  // create the doc and access the body
   var doc = create_stat_doc(docname) ;
-  // access body of doc
   var docbody = doc.getBody() ;
   // write initial heading to document
-  var heading_one = docbody.appendParagraph("Statistics");
-  heading_one.setHeading(DocumentApp.ParagraphHeading.HEADING1);
+  docbody.appendParagraph("Statistics").setHeading(DocumentApp.ParagraphHeading.HEADING1) ;
   
   // --- write overall stats
   
